@@ -1,16 +1,33 @@
-import { Form, redirect, ActionFunction } from "remix";
+import { useEffect, useRef } from "react";
+import { Form, ActionFunction, useActionData } from "remix";
+import { WeatherData, WeatherDataResponse } from "types";
+import { Weather } from "~/components";
+import { normaliseWeatherData } from "~/utils";
 
 export function meta() {
   return { title: "Remixed Weather App" };
 }
 export let action: ActionFunction = async ({ request }) => {
   let formData = await request.formData();
-  let answer = formData.get("answer");
+  let city = formData.get("city");
 
-  return redirect(`/weather/?city=${answer}`);
+  const response = fetch(
+    `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${process.env.OPEN_WEATHER_MAP_API}&units=metric`
+  );
+  const data = await (await response).json();
+  return normaliseWeatherData(data as WeatherDataResponse);
 };
 
-export default function ActionsDemo() {
+export default function Index() {
+  const data = useActionData<WeatherData>();
+  let cityRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (data && cityRef.current) {
+      cityRef.current.select();
+    }
+  }, [data]);
+
   return (
     <div className="remix__page">
       <main>
@@ -22,12 +39,14 @@ export default function ActionsDemo() {
         <Form method="post" className="remix__form">
           <label>
             <div>Location:</div>
-            <input name="answer" type="text" />
+            <input ref={cityRef} name="city" type="text" />
           </label>
           <div>
             <button>Search</button>
           </div>
         </Form>
+
+        {data ? <Weather {...data} /> : null}
       </main>
     </div>
   );
