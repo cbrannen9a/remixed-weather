@@ -4,12 +4,12 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
+  ScrollRestoration,
 } from "remix";
 import type { MetaFunction } from "remix";
 
 export const meta: MetaFunction = () => {
-  return { title: "New Remix App" };
+  return { title: "Remixed Weather" };
 };
 
 export default function App() {
@@ -25,7 +25,7 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
+        {process.env.NODE_ENV === "development" ? <LiveReload /> : null}
       </body>
     </html>
   );

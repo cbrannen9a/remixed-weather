@@ -1,6 +1,7 @@
-# Welcome to Remix!
+# Remix project - Weather app
 
 - [Remix Docs](https://remix.run/docs)
+- [OpenWeather](https://openweathermap.org/)
 
 ## Netlify Setup
 
@@ -29,6 +30,8 @@ netlify init
 ```
 
 ## Development
+
+Obtain and Open Weather API key and add to netlify as environment variable
 
 The Netlify CLI starts your app in development mode, rebuilding assets on file changes.
 
